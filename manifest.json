@@ -1,0 +1,20 @@
+{
+	"name": "ZermeNo",
+	"description": "Laat je lessen uitvallen in je Zermelo rooster.",
+	"version": "1.0",
+	"manifest_version": 2,
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+	"permissions": [
+		"activeTab",
+		"tabs",
+        "https://*.zportal.nl/app/"
+	],
+	"icons": {
+		"16": "/images/zermeno16.png",
+		"32": "/images/zermeno32.png",
+		"48": "/images/zermeno48.png",
+		"128": "/images/zermeno128.png"
+	}
+}

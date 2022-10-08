@@ -1,17 +1,22 @@
 // Execute code when DOM is loaded
 window.onload = async function() {
 
-    // const frontImageDiv = await waitForElm(".inset-video-item-play-action-container");
-    const frontImage = await waitForElm(".inset-video-item-image");
 
-    // frontImageDiv.addEventListener("click", async function() {
-    //     await tmButtonStuff();
-    // });
+    const currentURL = window.location.href;
+
+    if(currentURL.endsWith("?action=play")) {
+        await customStyleStuff();
+        await tmButtonStuff();
+    }
+
+    const frontImage = await waitForElm(".inset-video-item-image");
 
     frontImage.addEventListener("click", async function() {
         await customStyleStuff();
         await tmButtonStuff();
-    })
+    });
+
+
 
 };
 
@@ -52,9 +57,18 @@ async function tmButtonStuff() {
             tempTMButton.classList.add("bmpui-on");
 
             player.classList.add("tmlargeplayer");
-            header.classList.add("tmhidden");
-            globalHeader.classList.add("tmhidden");
+            header.classList.add("tmhiddenA");
+            globalHeader.classList.add("tmhiddenA");
             playButton.classList.add("tmhidden");
+
+            if(header.classList.contains("tmshowA")) {
+                header.classList.remove("tmshowA");
+                globalHeader.classList.remove("tmshowA");
+            }
+
+            if(player.classList.contains("tmnormalplayer")) {
+                player.classList.remove("tmnormalplayer");
+            }
 
         } else if (tempTMButton.classList.contains("bmpui-on")) {
             // TM OFF
@@ -62,9 +76,13 @@ async function tmButtonStuff() {
             tempTMButton.classList.add("bmpui-off");
 
             player.classList.remove("tmlargeplayer");
-            header.classList.remove("tmhidden");
-            globalHeader.classList.remove("tmhidden");
-            playButton.classList.remove("tmhidden");
+            header.classList.remove("tmhiddenA");
+            globalHeader.classList.remove("tmhiddenA");
+
+            header.classList.add("tmshowA");
+            globalHeader.classList.add("tmshowA");
+
+            player.classList.add("tmnormalplayer");
 
         }
     })
@@ -78,19 +96,76 @@ async function customStyleStuff() {
     customStyle.innerHTML = `
             .tmbutton {
             }
-        
+            
             .tmlargeplayer {
-                position: fixed;
-                margin-top: -10%;
-                left: 50%;
-                width: 150%;
-                aspect-ratio: 16/9;
-                max-width: 98vw;
-                transform: translateX(-50%);
+                animation: larger 500ms forwards;
+            }
+            
+            .tmnormalplayer {
+                animation: smaller 500ms;
             }
             
             .tmhidden {
                 display: none;
+            }
+            
+            .tmhiddenA {
+                animation: hide 500ms forwards;
+            }
+            
+            .tmshowA {
+                animation: show 500ms forwards;
+            }
+            
+            @keyframes hide {
+                100% {margin-top: -11%;}
+            }
+            
+            @keyframes show {
+                0% {margin-top: -11%;}
+                100% {margin-top: 0%;}
+            }
+            
+            @keyframes larger {
+                0% {
+                    position: fixed;
+                    margin-top: 0;
+                    left: 50%;
+                    width: 100%;
+                    aspect-ratio: 16/9;
+                    max-width: 98vw;
+                    transform: translateX(-50%);
+                }
+                100% {
+                    position: fixed;
+                    margin-top: -10%;
+                    left: 50%;
+                    width: 150%;
+                    aspect-ratio: 16/9;
+                    max-width: 98vw;
+                    transform: translateX(-50%);
+                }
+            }
+            
+            @keyframes smaller {
+                0% {
+                    position: fixed;
+                    margin-top: -10%;
+                    left: 50%;
+                    width: 150%;
+                    aspect-ratio: 16/9;
+                    max-width: 98vw;
+                    transform: translateX(-50%);
+                }
+                100% {
+                    position: fixed;
+                    margin-top: 0;
+                    left: 50%;
+                    width: 100%;
+                    aspect-ratio: 16/9;
+                    max-width: 98vw;
+                    transform: translateX(-50%);
+                }
             }
         `;
 

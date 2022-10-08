@@ -1,7 +1,7 @@
 // Execute code when DOM is loaded
 window.onload = async function() {
 
-    const frontImageDiv = await waitForElm(".inset-video-item-play-action-container");
+    // const frontImageDiv = await waitForElm(".inset-video-item-play-action-container");
     const frontImage = await waitForElm(".inset-video-item-image");
 
     // frontImageDiv.addEventListener("click", async function() {
@@ -9,6 +9,7 @@ window.onload = async function() {
     // });
 
     frontImage.addEventListener("click", async function() {
+        await customStyleStuff();
         await tmButtonStuff();
     })
 
@@ -23,6 +24,7 @@ async function tmButtonStuff() {
     tmButton.className = "bmpui-ui-fullscreentogglebutton bmpui-off";
     tmButton.type = "button";
     tmButton.id = "tmButton";
+    tmButton.title = "TheaterMode";
     tmButton.addEventListener("click", async function () {
 
         console.log("clicked");
@@ -36,6 +38,9 @@ async function tmButtonStuff() {
         let header = await waitForElm(".header")
         // console.log("header: " + header)
 
+        let globalHeader = await waitForElm(".global-header");
+        // console.log("global header: " + globalHeader
+
         let playButton = await waitForElm(".inset-video-item-play-button-container")
         // console.log("play button: " + playButton)
 
@@ -48,6 +53,7 @@ async function tmButtonStuff() {
 
             player.classList.add("tmlargeplayer");
             header.classList.add("tmhidden");
+            globalHeader.classList.add("tmhidden");
             playButton.classList.add("tmhidden");
 
         } else if (tempTMButton.classList.contains("bmpui-on")) {
@@ -57,15 +63,40 @@ async function tmButtonStuff() {
 
             player.classList.remove("tmlargeplayer");
             header.classList.remove("tmhidden");
+            globalHeader.classList.remove("tmhidden");
             playButton.classList.remove("tmhidden");
 
         }
     })
 
-    controlbarDiv.appendChild(tmButton)
+    await controlbarDiv.appendChild(tmButton)
 }
 
+async function customStyleStuff() {
+    // Make new style for large player with class TMLargePlayer
+    let customStyle = document.createElement("style");
+    customStyle.innerHTML = `
+            .tmbutton {
+            }
+        
+            .tmlargeplayer {
+                position: fixed;
+                margin-top: -10%;
+                left: 50%;
+                width: 150%;
+                aspect-ratio: 16/9;
+                max-width: 98vw;
+                transform: translateX(-50%);
+            }
+            
+            .tmhidden {
+                display: none;
+            }
+        `;
 
+    // Add our style to the page
+    document.head.appendChild(customStyle);
+}
 
 
 async function waitForElm(selector) {
